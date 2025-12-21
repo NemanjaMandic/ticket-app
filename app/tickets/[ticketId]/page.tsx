@@ -3,6 +3,8 @@ import { mockTickets } from "@/app/mockData";
 import { ticketCreatePath, ticketsPath } from "@/app/utils/paths";
 import { Placeholder } from "@/components/placeholder";
 import { Button } from "@/components/ui/button";
+import { TicketItem } from "@/features/ticket/components/TicketItem";
+import { getTicket } from "../queries/getTicket";
 
 type TicketPageProps = {
   params: Promise<{
@@ -13,7 +15,7 @@ type TicketPageProps = {
 export default async function TicketPage({ params }: TicketPageProps) {
   const { ticketId } = await params;
 
-  const foundTicket = mockTickets.find((ticket) => ticket.id === ticketId);
+  const foundTicket = await getTicket(ticketId);
 
   if (!foundTicket) {
     return (
@@ -28,9 +30,8 @@ export default async function TicketPage({ params }: TicketPageProps) {
     );
   }
   return (
-    <div>
-      <h1>{foundTicket.title}</h1>
-      <p>{foundTicket.content}</p>
+    <div className="flex justify-center animate-fade-from-top">
+      <TicketItem ticket={foundTicket} isDetail />
     </div>
   );
 }

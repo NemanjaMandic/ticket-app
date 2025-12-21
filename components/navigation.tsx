@@ -3,6 +3,7 @@ import Link from "next/link";
 import React from "react";
 import { buttonVariants } from "./ui/button";
 import { LucideKanban } from "lucide-react";
+import { ThemeSwitcher } from "./theme/ThemeSwitcher";
 
 export const Navigation = () => {
   return (
@@ -19,13 +20,14 @@ export const Navigation = () => {
           <h1 className="text-lg font-semibold">TicketBounty</h1>
         </Link>
       </div>
-      <div>
+      <div className="flex gap-4">
         <Link
           href={ticketsPath}
           className={buttonVariants({ variant: "default" })}
         >
           Tickets
         </Link>
+        <ThemeSwitcher />
       </div>
     </nav>
   );
