@@ -1,12 +1,4 @@
-import { ticketPath } from "@/app/utils/paths";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { TICKET_ICONS } from "@/features/constants";
 import { Ticket } from "@/features/types";
 import clsx from "clsx";
@@ -50,5 +42,3 @@ export const TicketItem = ({ ticket, isDetail = false }: TicketProps) => {
     </div>
   );
 };
-
-TicketItem.displayName = "KarINAAAAAA";

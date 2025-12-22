@@ -6,10 +6,7 @@ export const getTicket = async (id: string): Promise<Ticket> => {
 
   return new Promise((resolve, reject) => {
     const ticket = mockTickets.find((ticket) => ticket.id === id);
-    if (ticket) {
-      resolve(ticket);
-    } else {
-      reject(new Error("Ticket not found"));
-    }
+
+    resolve(ticket!);
   });
 };

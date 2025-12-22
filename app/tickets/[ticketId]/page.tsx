@@ -1,6 +1,5 @@
 import Link from "next/link";
-import { mockTickets } from "@/app/mockData";
-import { ticketCreatePath, ticketsPath } from "@/app/utils/paths";
+import { ticketsPath } from "@/app/utils/paths";
 import { Placeholder } from "@/components/placeholder";
 import { Button } from "@/components/ui/button";
 import { TicketItem } from "@/features/ticket/components/TicketItem";
