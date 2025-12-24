@@ -1,14 +1,18 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { TICKET_ICONS } from "@/features/constants";
-import { Ticket } from "@/features/types";
 import clsx from "clsx";
 import { DetailButton } from "./components/DetailButton";
+import { Ticket } from "@/lib/generated/prisma/client";
+import { DeleteButton } from "./components/DeleteButton";
+import { deleteTicket } from "@/app/tickets/actions/deleteTicket";
+import EditButton from "./components/EditButton";
 
 type TicketProps = {
   ticket: Ticket;
   isDetail?: boolean;
 };
-export const TicketItem = ({ ticket, isDetail = false }: TicketProps) => {
+
+export const TicketItem = async ({ ticket, isDetail = false }: TicketProps) => {
   return (
     <div
       className={clsx("flex w-full gap-x-1", {
@@ -34,11 +38,13 @@ export const TicketItem = ({ ticket, isDetail = false }: TicketProps) => {
           </span>
         </CardContent>
       </Card>
-      {!isDetail && (
-        <div className="flex flex-col gap-y-1">
-          <DetailButton ticketId={ticket.id} />
-        </div>
-      )}
+      <div className="flex flex-col gap-y-1">
+        {!isDetail && <DetailButton ticketId={ticket.id} />}
+        <form action={deleteTicket.bind(null, ticket.id)}>
+          <DeleteButton />
+          <EditButton ticketId={ticket.id} />
+        </form>
+      </div>
     </div>
   );
 };

@@ -1,4 +1,4 @@
-import { PrismaClient, TicketStatus } from "@/lib/generated/prisma/client";
+import { TicketStatus } from "@/lib/generated/prisma/client";
 import { prisma } from "@/lib/prisma";
 
 const tickets = [
