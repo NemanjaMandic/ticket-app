@@ -6,6 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Ticket } from "@/lib/generated/prisma/client";
 import { upsertTicket } from "@/app/tickets/actions/upsertTicket";
 import { useActionState } from "react";
+import { toast } from "sonner";
 import { LucideLoaderCircle } from "lucide-react";
 import { useFormStatus } from "react-dom";
 import { FieldError } from "@/features/components/FieldError";
@@ -25,7 +26,16 @@ export const TicketForm = ({ ticket }: TicketFormProps) => {
 
   const buttonText = ticket ? "Update Ticket" : "Create Ticket";
 
-  useActionFeedback(actionState);
+  useActionFeedback(actionState, {
+    onSuccess: ({ actionState }) => {
+      toast.success(actionState.message);
+    },
+    onError: ({ actionState }) => {
+      if (actionState.message) {
+        toast.error(actionState.message);
+      }
+    },
+  });
 
   return (
     <form action={action} className="flex flex-col gap-y-2">
