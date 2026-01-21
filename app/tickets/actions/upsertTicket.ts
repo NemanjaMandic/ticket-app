@@ -9,6 +9,7 @@ import {
   fromErrorToActionState,
   toActionState,
 } from "@/features/ticket/components/TicketForm/utils";
+import { setCookieByKey } from "@/app/actions/cookies";
 
 const ticketSchema = z.object({
   title: z
@@ -44,6 +45,7 @@ export const upsertTicket = async (
   revalidatePath(ticketsPath);
 
   if (id) {
+    await setCookieByKey("toast", "Ticket updated successfully");
     redirect(ticketPath(id));
   }
 

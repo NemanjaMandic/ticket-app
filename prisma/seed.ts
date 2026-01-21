@@ -6,22 +6,30 @@ const tickets = [
     title: "Pervi tiket",
     content: "Ovo je opis petog tiketa",
     status: TicketStatus.DONE,
+    bounty: 399,
+    deadline: "2024-10-15",
   },
   {
     title: "Sesti tiket",
     content: "Ovo je opis sestog tiketa",
     status: TicketStatus.OPEN,
+    bounty: 399,
+    deadline: "2024-10-15",
   },
   {
     title: "Sedmi tiket",
     content: "Ovo je opis sedmog tiketa",
     status: TicketStatus.OPEN,
+    bounty: 399,
+    deadline: "2024-10-15",
   },
 
   {
     title: "Osmi tiket",
     content: "Ovo je opis osmog tiketa",
     status: TicketStatus.IN_PROGRESS,
+    bounty: 399,
+    deadline: "2024-10-15",
   },
 ];
 

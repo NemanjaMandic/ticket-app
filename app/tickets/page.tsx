@@ -4,6 +4,7 @@ import { TicketList } from "@/features/ticket/components/TicketList/TicketList";
 import { Spinner } from "@/components/spinner";
 import { CardCompact } from "@/features/components/CardCompact";
 import { TicketForm } from "@/features/ticket/components/TicketForm";
+import { RedirectToast } from "@/components/redirect-toast";
 
 export default function TicketsPage() {
   return (
@@ -17,6 +18,7 @@ export default function TicketsPage() {
       <Suspense fallback={<Spinner />}>
         <TicketList />
       </Suspense>
+      <RedirectToast />
     </div>
   );
 }
