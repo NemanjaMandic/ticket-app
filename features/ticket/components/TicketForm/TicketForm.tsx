@@ -12,6 +12,7 @@ import { useFormStatus } from "react-dom";
 import { FieldError } from "@/features/components/FieldError";
 import { EMPTY_ACTION_STATE } from "./utils";
 import { useActionFeedback } from "@/features/hooks/useActionFeedback";
+import { fromCent } from "@/app/utils/currency";
 
 type TicketFormProps = {
   ticket?: Ticket;
@@ -58,6 +59,36 @@ export const TicketForm = ({ ticket }: TicketFormProps) => {
         }
       />
       <FieldError actionState={actionState} name="content" />
+      <div className="flex gap-x-2 mb-1">
+        <div className="w-1/2">
+          <FieldLabel htmlFor="deadline">Deadline</FieldLabel>
+          <Input
+            type="date"
+            id="deadline"
+            name="deadline"
+            defaultValue={
+              (actionState?.payload?.get("deadline") as string) ||
+              ticket?.deadline
+            }
+          />
+          <FieldError actionState={actionState} name="deadline" />
+        </div>
+        <div className="w-1/2">
+          <FieldLabel htmlFor="bounty">Bounty (€)</FieldLabel>
+          <Input
+            type="number"
+            step=".01"
+            id="bounty"
+            name="bounty"
+            defaultValue={
+              (actionState?.payload?.get("bounty")
+                ? fromCent(Number(actionState?.payload?.get("bounty")))
+                : undefined) ?? (ticket?.bounty ? fromCent(ticket?.bounty) : "")
+            }
+          />
+          <FieldError actionState={actionState} name="bounty" />
+        </div>
+      </div>
       <Button type="submit" disabled={pending}>
         {pending && (
           <LucideLoaderCircle className="animate-spin mr-2 h-4 w-4" />
