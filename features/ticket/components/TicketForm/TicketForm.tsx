@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+
 import { Ticket } from "@/lib/generated/prisma/client";
 import { upsertTicket } from "@/app/tickets/actions/upsertTicket";
 import { useActionState } from "react";
@@ -13,6 +14,7 @@ import { FieldError } from "@/features/components/FieldError";
 import { EMPTY_ACTION_STATE } from "./utils";
 import { useActionFeedback } from "@/features/hooks/useActionFeedback";
 import { fromCent } from "@/app/utils/currency";
+import { DatePicker } from "@/components/date-picker";
 
 type TicketFormProps = {
   ticket?: Ticket;
@@ -21,7 +23,7 @@ type TicketFormProps = {
 export const TicketForm = ({ ticket }: TicketFormProps) => {
   const [actionState, action] = useActionState(
     upsertTicket.bind(null, ticket?.id),
-    EMPTY_ACTION_STATE
+    EMPTY_ACTION_STATE,
   );
   const { pending } = useFormStatus();
 
@@ -62,8 +64,7 @@ export const TicketForm = ({ ticket }: TicketFormProps) => {
       <div className="flex gap-x-2 mb-1">
         <div className="w-1/2">
           <FieldLabel htmlFor="deadline">Deadline</FieldLabel>
-          <Input
-            type="date"
+          <DatePicker
             id="deadline"
             name="deadline"
             defaultValue={
@@ -71,6 +72,15 @@ export const TicketForm = ({ ticket }: TicketFormProps) => {
               ticket?.deadline
             }
           />
+          {/* <Input
+            type="date"
+            id="deadline"
+            name="deadline"
+            defaultValue={
+              (actionState?.payload?.get("deadline") as string) ||
+              ticket?.deadline
+            }
+          /> */}
           <FieldError actionState={actionState} name="deadline" />
         </div>
         <div className="w-1/2">
