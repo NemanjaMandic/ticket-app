@@ -9,18 +9,29 @@ import {
 } from "@/components/ui/popover";
 import { format } from "date-fns";
 import { ChevronDownIcon } from "lucide-react";
+import { useImperativeHandle } from "react";
 import { useState } from "react";
 
 type DatePickerProps = {
   id?: string;
   name?: string;
   defaultValue?: string;
+  imperativeHandleRef?: React.RefObject<{ reset: () => void } | null>;
 };
 
-export const DatePicker = ({ id, name, defaultValue }: DatePickerProps) => {
+export const DatePicker = ({
+  id,
+  name,
+  defaultValue,
+  imperativeHandleRef,
+}: DatePickerProps) => {
   const [date, setDate] = useState<Date | undefined>(
     defaultValue ? new Date(defaultValue) : new Date(),
   );
+
+  useImperativeHandle(imperativeHandleRef, () => ({
+    reset: () => setDate(new Date()),
+  }));
 
   const [open, setOpen] = useState(false);
   const formatedStringDate = date ? format(date, "yyy-MM-dd") : "";
@@ -46,6 +57,7 @@ export const DatePicker = ({ id, name, defaultValue }: DatePickerProps) => {
         <Calendar
           mode="single"
           selected={date}
+          disabled={{ before: new Date() }}
           onSelect={handleSelectDate}
           defaultMonth={date}
         />

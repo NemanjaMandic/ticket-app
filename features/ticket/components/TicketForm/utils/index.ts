@@ -15,7 +15,7 @@ export const EMPTY_ACTION_STATE: ActionState = {
 
 export const fromErrorToActionState = (
   error: unknown,
-  formData: FormData
+  formData?: FormData,
 ): ActionState => {
   if (error instanceof z.ZodError) {
     const flattened = z.flattenError(error);
@@ -47,7 +47,7 @@ export const fromErrorToActionState = (
 
 export const toActionState = (
   status: ActionState["status"],
-  message: string
+  message: string,
 ): ActionState => {
   return {
     status,

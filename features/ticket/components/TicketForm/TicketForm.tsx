@@ -15,6 +15,7 @@ import { EMPTY_ACTION_STATE } from "./utils";
 import { useActionFeedback } from "@/features/hooks/useActionFeedback";
 import { fromCent } from "@/app/utils/currency";
 import { DatePicker } from "@/components/date-picker";
+import { useRef } from "react";
 
 type TicketFormProps = {
   ticket?: Ticket;
@@ -25,13 +26,21 @@ export const TicketForm = ({ ticket }: TicketFormProps) => {
     upsertTicket.bind(null, ticket?.id),
     EMPTY_ACTION_STATE,
   );
+
+  const datePickerImperativeRef = useRef<{ reset: () => void }>(null);
+
   const { pending } = useFormStatus();
 
   const buttonText = ticket ? "Update Ticket" : "Create Ticket";
 
+  const handleSuccess = () => {
+    datePickerImperativeRef.current?.reset();
+  };
+
   useActionFeedback(actionState, {
     onSuccess: ({ actionState }) => {
       toast.success(actionState.message);
+      handleSuccess();
     },
     onError: ({ actionState }) => {
       if (actionState.message) {
@@ -67,20 +76,13 @@ export const TicketForm = ({ ticket }: TicketFormProps) => {
           <DatePicker
             id="deadline"
             name="deadline"
+            imperativeHandleRef={datePickerImperativeRef}
+            // key={actionState.timestamp}
             defaultValue={
               (actionState?.payload?.get("deadline") as string) ||
               ticket?.deadline
             }
           />
-          {/* <Input
-            type="date"
-            id="deadline"
-            name="deadline"
-            defaultValue={
-              (actionState?.payload?.get("deadline") as string) ||
-              ticket?.deadline
-            }
-          /> */}
           <FieldError actionState={actionState} name="deadline" />
         </div>
         <div className="w-1/2">

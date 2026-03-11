@@ -5,3 +5,9 @@ export const TICKET_ICONS: Record<string, React.ReactNode> = {
   OPEN: <LucideFileText />,
   IN_PROGRESS: <LucidePencil />,
 };
+
+export const TICKET_STATUS_LABELS: Record<string, string> = {
+  DONE: "Done",
+  OPEN: "Open",
+  IN_PROGRESS: "In Progress",
+};
