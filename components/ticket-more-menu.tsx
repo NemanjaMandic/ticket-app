@@ -17,6 +17,8 @@ import {
 import { TICKET_STATUS_LABELS } from "@/features/constants";
 import { updateTicketStatus } from "@/app/tickets/actions/updateTicketStatus";
 import { toast } from "sonner";
+import { useConfirmDialog } from "@/features/ticket/components/ConfirmDialog";
+import { deleteTicket } from "@/app/tickets/actions/deleteTicket";
 
 type TicketMoreMenuProps = {
   ticket: Ticket;
@@ -24,37 +26,53 @@ type TicketMoreMenuProps = {
 };
 
 export const TicketMoreMenu = ({ ticket, trigger }: TicketMoreMenuProps) => {
-  console.log("ticket", ticket);
-
   const handleUpdateTicketStatus = async (value: string) => {
-    const result = await updateTicketStatus(ticket.id, value as TicketStatus);
+    const promise = updateTicketStatus(ticket.id, value as TicketStatus);
+
+    toast.promise(promise, {
+      loading: "Updating ticket status...",
+    });
+
+    const result = await promise;
     if (result.status === "ERROR") {
       toast.error(result.message);
     } else if (result.status === "SUCCESS") {
       toast.success(result.message);
     }
   };
+
+  const [deleteButton, deleteDialog] = useConfirmDialog({
+    title: "Are you sure you want to delete this ticket?",
+    description: "This action cannot be undone.",
+    action: deleteTicket.bind(null, ticket.id),
+    trigger: (
+      <DropdownMenuItem>
+        <LucideTrash className="mr-2 w-4 h-4" />
+        <span>Delete</span>
+      </DropdownMenuItem>
+    ),
+  });
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>{trigger}</DropdownMenuTrigger>
-      <DropdownMenuContent align="start" side="right" className="w-56">
-        <DropdownMenuRadioGroup
-          value={ticket.status}
-          className="p-3"
-          onValueChange={handleUpdateTicketStatus}
-        >
-          {Object.entries(TICKET_STATUS_LABELS).map(([key, label]) => (
-            <DropdownMenuRadioItem key={key} value={key}>
-              {label}
-            </DropdownMenuRadioItem>
-          ))}
-        </DropdownMenuRadioGroup>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem>
-          <LucideTrash className="mr-2 w-4 h-4" />
-          <span>Delete Ticket</span>
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+    <>
+      {deleteDialog}
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>{trigger}</DropdownMenuTrigger>
+        <DropdownMenuContent align="start" side="right" className="w-56">
+          <DropdownMenuRadioGroup
+            value={ticket.status}
+            className="p-3"
+            onValueChange={handleUpdateTicketStatus}
+          >
+            {Object.entries(TICKET_STATUS_LABELS).map(([key, label]) => (
+              <DropdownMenuRadioItem key={key} value={key}>
+                {label}
+              </DropdownMenuRadioItem>
+            ))}
+          </DropdownMenuRadioGroup>
+          <DropdownMenuSeparator />
+          {deleteButton}
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </>
   );
 };
