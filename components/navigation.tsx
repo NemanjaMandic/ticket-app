@@ -1,9 +1,4 @@
-import {
-  homePath,
-  ticketsPath,
-  signinPath,
-  signupPath,
-} from "@/app/utils/paths";
+import { homePath, signinPath, signupPath } from "@/app/utils/paths";
 import Link from "next/link";
 import { buttonVariants } from "./ui/button";
 import { LucideKanban, LucideLogOut } from "lucide-react";
@@ -30,17 +25,9 @@ export const Navigation = async () => {
       </div>
       <div className="flex gap-4">
         {user ? (
-          <>
-            <Link
-              href={ticketsPath}
-              className={buttonVariants({ variant: "default" })}
-            >
-              Tickets
-            </Link>
-            <form action={signOut}>
-              <SubmitButton label="Sign Out" icon={<LucideLogOut />} />
-            </form>
-          </>
+          <form action={signOut}>
+            <SubmitButton label="Sign Out" icon={<LucideLogOut />} />
+          </form>
         ) : (
           <>
             <Link

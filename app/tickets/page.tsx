@@ -5,18 +5,23 @@ import { Spinner } from "@/components/spinner";
 import { CardCompact } from "@/features/components/CardCompact";
 import { TicketForm } from "@/features/ticket/components/TicketForm";
 import { RedirectToast } from "@/components/redirect-toast";
+import { getAuth } from "@/features/auth/queries/getAuth";
 
-export default function TicketsPage() {
+export default async function TicketsPage() {
+  const { user } = await getAuth();
   return (
     <div className="flex flex-1 flex-col gap-y-8">
-      <Heading title="Tickets" description="All your tickets in one place." />
+      <Heading
+        title="My Tickets"
+        description="All your tickets in one place."
+      />
       <CardCompact
         title="Create Ticket"
         description="A new ticket will be created."
         content={<TicketForm />}
       />
       <Suspense fallback={<Spinner />}>
-        <TicketList />
+        <TicketList userId={user?.id} />
       </Suspense>
       <RedirectToast />
     </div>
