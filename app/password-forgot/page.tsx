@@ -1,6 +1,6 @@
 import { CardCompact } from "@/features/components/CardCompact";
 import Link from "next/link";
-import { passwordForgotPath, signinPath } from "../utils/paths";
+import { passwordForgotPath, signupPath } from "../utils/paths";
 import { SigninForm } from "@/features/auth/components/SigninForm";
 
 export default function PasswordForgotPage() {
@@ -15,7 +15,7 @@ export default function PasswordForgotPage() {
           <div className="flex gap-35">
             <Link
               className="text-sm text-muted-foreground block"
-              href={signinPath}
+              href={signupPath}
             >
               No account yet?
             </Link>

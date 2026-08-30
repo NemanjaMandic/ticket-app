@@ -1,5 +1,5 @@
 "use server";
-import { ticketPath, ticketsPath } from "@/app/utils/paths";
+import { signinPath, ticketPath, ticketsPath } from "@/app/utils/paths";
 import { prisma } from "@/lib/prisma";
 import { z } from "zod";
 import { revalidatePath } from "next/cache";
@@ -11,6 +11,9 @@ import {
 } from "@/features/ticket/components/TicketForm/utils";
 import { setCookieByKey } from "@/app/actions/cookies";
 import { toCent } from "@/app/utils/currency";
+import { getAuth } from "@/features/auth/queries/getAuth";
+import { getAuthOrRedirect } from "../queries/getAuthOrRedirect";
+import { isOwner } from "@/features/auth/utils/isOwner";
 
 const ticketSchema = z.object({
   title: z
@@ -30,9 +33,20 @@ const ticketSchema = z.object({
 export const upsertTicket = async (
   id: string | undefined,
   _actionState: ActionState,
-  formData: FormData
+  formData: FormData,
 ) => {
+  const { user } = await getAuthOrRedirect();
   try {
+    if (id) {
+      const ticket = await prisma.ticket.findUnique({
+        where: { id },
+      });
+
+      if (!ticket || !isOwner(user, ticket)) {
+        return toActionState("ERROR", "Not authorized");
+      }
+    }
+
     const data = ticketSchema.parse({
       title: formData.get("title"),
       content: formData.get("content"),
@@ -42,8 +56,10 @@ export const upsertTicket = async (
 
     const dbData = {
       ...data,
+      userId: user.id,
       bounty: toCent(data.bounty), // Convert to cents
     };
+
     await prisma.ticket.upsert({
       where: { id: id || "" },
       update: dbData,

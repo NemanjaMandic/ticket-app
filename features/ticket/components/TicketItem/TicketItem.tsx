@@ -8,25 +8,31 @@ import {
 import { TICKET_ICONS } from "@/features/constants";
 import clsx from "clsx";
 import { DetailButton } from "./components/DetailButton";
-import { Ticket } from "@/lib/generated/prisma/client";
+import { Prisma } from "@/lib/generated/prisma/client";
 import EditButton from "./components/EditButton";
 import { toCurrencyFromCent } from "@/app/utils/currency";
 import { TicketMoreMenu } from "@/components/ticket-more-menu";
 
 import { LucideMoreVertical } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { getAuth } from "@/features/auth/queries/getAuth";
+import { isOwner } from "@/features/auth/utils/isOwner";
 
-type TicketProps = {
-  ticket: Ticket;
+export type TicketProps = {
+  ticket: Prisma.TicketGetPayload<{
+    include: { user: { select: { username: true } } };
+  }>;
   isDetail?: boolean;
 };
 
 export const TicketItem = async ({ ticket, isDetail = false }: TicketProps) => {
-  const editButton = <EditButton ticketId={ticket.id} />;
+  const { user } = await getAuth();
+  const isTicketOwner = isOwner(user, ticket);
+  const editButton = isTicketOwner ? <EditButton ticketId={ticket.id} /> : null;
 
   const detailButton = <DetailButton ticketId={ticket.id} />;
 
-  const moreMenu = (
+  const moreMenu = isTicketOwner ? (
     <TicketMoreMenu
       ticket={ticket}
       trigger={
@@ -35,7 +41,7 @@ export const TicketItem = async ({ ticket, isDetail = false }: TicketProps) => {
         </Button>
       }
     />
-  );
+  ) : null;
   return (
     <div
       className={clsx("flex w-full gap-x-1", {
@@ -61,7 +67,9 @@ export const TicketItem = async ({ ticket, isDetail = false }: TicketProps) => {
           </span>
         </CardContent>
         <CardFooter className="flex justify-between">
-          <p className="text-sm text-muted-foreground">{ticket.deadline}</p>
+          <p className="text-sm text-muted-foreground">
+            {ticket.deadline} by {ticket.user.username}
+          </p>
           <p className="text-sm text-muted-foreground">
             {toCurrencyFromCent(ticket.bounty)} €
           </p>

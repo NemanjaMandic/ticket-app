@@ -2,6 +2,7 @@ import { TicketItem } from "@/features/ticket/components/TicketItem";
 import { getTicket } from "../queries/getTicket";
 import { NotFound } from "@/features/components/NotFound/NotFound";
 import { RedirectToast } from "@/components/redirect-toast";
+import { TicketProps } from "@/features/ticket/components/TicketItem/TicketItem";
 
 type TicketPageProps = {
   params: Promise<{
