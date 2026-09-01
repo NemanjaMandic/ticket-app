@@ -1,5 +1,5 @@
 import { TicketItem } from "../TicketItem";
-import { getTickets } from "@/app/tickets/queries/getTickets";
+import { getTickets } from "@/app/(authenticated)/tickets/queries/getTickets";
 
 type TicketListProps = {
   userId?: string;

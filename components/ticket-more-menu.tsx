@@ -15,10 +15,10 @@ import {
   DropdownMenuRadioItem,
 } from "@radix-ui/react-dropdown-menu";
 import { TICKET_STATUS_LABELS } from "@/features/constants";
-import { updateTicketStatus } from "@/app/tickets/actions/updateTicketStatus";
+import { updateTicketStatus } from "@/app/(authenticated)/tickets/actions/updateTicketStatus";
 import { toast } from "sonner";
 import { useConfirmDialog } from "@/features/ticket/components/ConfirmDialog";
-import { deleteTicket } from "@/app/tickets/actions/deleteTicket";
+import { deleteTicket } from "@/app/(authenticated)/tickets/actions/deleteTicket";
 
 type TicketMoreMenuProps = {
   ticket: Ticket;

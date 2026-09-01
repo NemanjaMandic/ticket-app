@@ -5,7 +5,6 @@ import { PropsWithChildren } from "react";
 
 const AuthenticatedLayout = async ({ children }: PropsWithChildren) => {
   const { user } = await getAuth();
-  console.log("user", user);
   if (!user) {
     redirect(signinPath);
   }

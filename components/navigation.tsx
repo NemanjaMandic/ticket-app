@@ -1,11 +1,10 @@
 import { homePath, signinPath, signupPath } from "@/app/utils/paths";
 import Link from "next/link";
 import { buttonVariants } from "./ui/button";
-import { LucideKanban, LucideLogOut } from "lucide-react";
+import { LucideKanban } from "lucide-react";
 import { ThemeSwitcher } from "./theme/ThemeSwitcher";
-import { SubmitButton } from "./form/SubmitButton";
-import { signOut } from "@/features/auth/actions/signOut";
 import { getAuth } from "@/features/auth/queries/getAuth";
+import { AccountDropdown } from "./account-dropdown/AccountDropdown";
 
 export const Navigation = async () => {
   const { user } = await getAuth();
@@ -25,9 +24,7 @@ export const Navigation = async () => {
       </div>
       <div className="flex gap-4">
         {user ? (
-          <form action={signOut}>
-            <SubmitButton label="Sign Out" icon={<LucideLogOut />} />
-          </form>
+          <AccountDropdown user={user} />
         ) : (
           <>
             <Link

@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 
 import { Ticket } from "@/lib/generated/prisma/client";
-import { upsertTicket } from "@/app/tickets/actions/upsertTicket";
+import { upsertTicket } from "@/app/(authenticated)/tickets/actions/upsertTicket";
 import { useActionState } from "react";
 import { toast } from "sonner";
 import { LucideLoaderCircle } from "lucide-react";
