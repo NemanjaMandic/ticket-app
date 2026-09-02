@@ -6,8 +6,12 @@ import { CardCompact } from "@/features/components/CardCompact";
 import { TicketForm } from "@/features/ticket/components/TicketForm";
 import { RedirectToast } from "@/components/redirect-toast";
 import { getAuth } from "@/features/auth/queries/getAuth";
+import { SearchParams } from "@/features/ticket/components/types";
 
-export default async function TicketsPage() {
+type TicketsPage = {
+  searchParams: Promise<SearchParams>;
+};
+export default async function TicketsPage({ searchParams }: TicketsPage) {
   const { user } = await getAuth();
   return (
     <div className="flex flex-1 flex-col gap-y-8">
@@ -21,7 +25,7 @@ export default async function TicketsPage() {
         content={<TicketForm />}
       />
       <Suspense fallback={<Spinner />}>
-        <TicketList userId={user?.id} />
+        <TicketList userId={user?.id} searchParams={searchParams} />
       </Suspense>
       <RedirectToast />
     </div>

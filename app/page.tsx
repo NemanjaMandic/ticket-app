@@ -2,8 +2,13 @@ import { Heading } from "@/components/heading";
 import { Suspense } from "react";
 import { Spinner } from "@/components/spinner";
 import { TicketList } from "@/features/ticket/components/TicketList/TicketList";
+import { SearchParams } from "@/features/ticket/components/types";
 
-export default function HomePage() {
+type HomePageProps = {
+  searchParams: Promise<SearchParams>;
+};
+
+export default async function HomePage({ searchParams }: HomePageProps) {
   return (
     <div className="flex flex-1 flex-col gap-y-8">
       <Heading
@@ -12,7 +17,7 @@ export default function HomePage() {
       />
 
       <Suspense fallback={<Spinner />}>
-        <TicketList />
+        <TicketList searchParams={searchParams} />
       </Suspense>
     </div>
   );
