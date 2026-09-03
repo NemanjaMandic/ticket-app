@@ -6,7 +6,8 @@ import { CardCompact } from "@/features/components/CardCompact";
 import { TicketForm } from "@/features/ticket/components/TicketForm";
 import { RedirectToast } from "@/components/redirect-toast";
 import { getAuth } from "@/features/auth/queries/getAuth";
-import { SearchParams } from "@/features/ticket/components/types";
+import { searchParamsCache } from "@/features/ticket/utils";
+import { SearchParams } from "nuqs/server";
 
 type TicketsPage = {
   searchParams: Promise<SearchParams>;
@@ -25,7 +26,10 @@ export default async function TicketsPage({ searchParams }: TicketsPage) {
         content={<TicketForm />}
       />
       <Suspense fallback={<Spinner />}>
-        <TicketList userId={user?.id} searchParams={searchParams} />
+        <TicketList
+          userId={user?.id}
+          searchParams={await searchParamsCache.parse(searchParams)}
+        />
       </Suspense>
       <RedirectToast />
     </div>

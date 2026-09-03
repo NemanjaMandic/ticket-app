@@ -2,7 +2,8 @@ import { Heading } from "@/components/heading";
 import { Suspense } from "react";
 import { Spinner } from "@/components/spinner";
 import { TicketList } from "@/features/ticket/components/TicketList/TicketList";
-import { SearchParams } from "@/features/ticket/components/types";
+import { SearchParams } from "nuqs/server";
+import { searchParamsCache } from "@/features/ticket/utils";
 
 type HomePageProps = {
   searchParams: Promise<SearchParams>;
@@ -17,7 +18,9 @@ export default async function HomePage({ searchParams }: HomePageProps) {
       />
 
       <Suspense fallback={<Spinner />}>
-        <TicketList searchParams={searchParams} />
+        <TicketList
+          searchParams={await searchParamsCache.parse(searchParams)}
+        />
       </Suspense>
     </div>
   );
