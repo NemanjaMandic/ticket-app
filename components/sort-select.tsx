@@ -1,40 +1,30 @@
 "use client";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import {
   Select,
   SelectContent,
   SelectGroup,
   SelectItem,
-  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "./ui/select";
+import { useQueryStates } from "nuqs";
+import { sortOptions, sortParser } from "@/features/ticket/utils";
 
 type SortSelectProps = {
-  options: { label: string; value: string }[];
-  defaultValue: string;
+  options: { sortKey: string; sortValue: string; label: string }[];
 };
 
-export const SortSelect = ({ options, defaultValue }: SortSelectProps) => {
-  const searchParams = useSearchParams();
-  const pathname = usePathname();
-  const { replace } = useRouter();
+export const SortSelect = ({ options }: SortSelectProps) => {
+  const [sort, setSort] = useQueryStates(sortParser, sortOptions);
 
-  const handleSort = (value: string) => {
-    const params = new URLSearchParams(searchParams);
-    if (value === defaultValue) {
-      params.delete("sort");
-    } else if (value) {
-      params.set("sort", value);
-    } else {
-      params.delete("sort");
-    }
-    replace(`${pathname}?${params.toString()}`, { scroll: false });
+  const handleSort = (compositeKey: string) => {
+    const [sortKey, sortValue] = compositeKey.split("_");
+    setSort({ sortKey, sortValue });
   };
 
   return (
     <Select
-      defaultValue={searchParams.get("sort") || defaultValue}
+      defaultValue={sort.sortKey + "_" + sort.sortValue}
       onValueChange={handleSort}
     >
       <SelectTrigger>
@@ -42,9 +32,11 @@ export const SortSelect = ({ options, defaultValue }: SortSelectProps) => {
       </SelectTrigger>
       <SelectContent>
         <SelectGroup>
-          <SelectLabel>Fruits</SelectLabel>
           {options.map((item) => (
-            <SelectItem key={item.value} value={item.value}>
+            <SelectItem
+              key={item.sortKey + item.sortValue}
+              value={item.sortKey + "_" + item.sortValue}
+            >
               {item.label}
             </SelectItem>
           ))}
